@@ -6,9 +6,28 @@ import users from './Users';
 import products from './Products';
 import {BootstrapTable,
   TableHeaderColumn} from 'react-bootstrap-table';
-import Table from 'react-table';
+import Table from 'react-bootstrap/Table';
+import {
+  Navbar,
+  Nav,
+  FormControl,
+  Container,
+  Form,
+  Button
+} from "react-bootstrap";
 import styled from 'styled-components';
 import mockProductsVar from "./Products";
+
+
+
+//import Table from 'react-bootstrap/Table';
+//import Container from 'react-bootstrap/Container';
+//import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { data } from './data.js';
+
+
 
 const Styles = styled.div`
 padding: 1rem;
@@ -42,15 +61,23 @@ td {
 form {
   border-spacing: 0;
   border: 1px solid gray;
-  background-color: lightgreen;
+  background-color: lightblue;
+  text-align: center;
 }
 `
 
 function App() {
  
-    
+  
+
     const [productsVar, setProductsVar] = useState (mockProductsVar);
     const [productToEdit, setProductToEdit] = useState (null);
+    
+    
+    const [contacts, setContacts] = useState(data);
+    const [search, setSearch] = useState('');
+
+
 
 
     const handleProductTitleChange = (title) => {
@@ -95,42 +122,135 @@ function App() {
     }
 
 
+    const handleUpdate1 = (dat1) => {
+      
+      dat1.id = null;
+      dat1.title = null;
+      dat1.description = null;
+      dat1.price = null;
+      dat1.discountPercentage = null;
+      dat1.rating = null;
+      dat1.stock = null;
+      dat1.brand = null;
+      dat1.category = null;
+      dat1.thumbnail = null;
+
+      setProductToEdit();
+    }
+
+
     return (
+        <>
+        <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand href="/">
+              <img
+                src={logo}
+                height="30"
+                width="30"
+                className="d-inline-block align-top"
+                alt="Logo"
+              /> TRAINS List
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="mr-auto">
+                <Nav.Link href="/"> Home </Nav.Link>
+                <Nav.Link href="/about"> About us </Nav.Link>
+                <Nav.Link href="/contacts"> Contacts </Nav.Link>
+                <Nav.Link href="/blog"> Blog </Nav.Link>
+              </Nav>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+             {/*<Form inline>
+                <div className="line">
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="mr-sm-2"
+                />
+                <Button variant="outline-info mt-4">Search for a TRAIN</Button>
+                </div>
+                </Form> */}
+             
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+
+        <Container>
+        <h1 className='text-center mt-4'>Trains Shedule<br/><h5>quick search</h5><br/><h4>for {new Date().toLocaleString() + ""}</h4></h1>
+        <Form>
+          <InputGroup className='my-3'>
+
+            {/* onChange for search */}
+            <Form.Control
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder='Search trains'
+            />
+          </InputGroup>
+        </Form>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Train Name</th>
+              <th>train №</th>
+              <th>time-in-transit</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+          {data
+              .filter((item) => {
+                return search.toLowerCase() === ''
+                  ? item
+                  : item.first_name.toLowerCase().includes(search);
+              })
+              .map((item, index) => (
+                <tr key={index}>
+                  <td>{item.first_name}</td>
+                  <td>{item.last_name}</td>
+                  <td>{item.email}</td>
+                  <td>{item.phone}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </Container>
+
+
         <div className="products-page">
         { productToEdit && (
 
 
 <Styles>
       <form class="row g-3">
-      <h3><strong>Form</strong><br/><br/>(edit a <strong>Product</strong>)</h3>
+      <h3><strong>Form</strong><br/><br/>(edit the ------<strong>Train</strong>------ Schedule Details)</h3>
   <div class="col-md-6">
-    <label for="inputEmail4" class="form-label">Title</label>
+    <label for="inputEmail4" class="form-label">Train Name</label>
     <input type="email" class="form-control" id="inputEmail4" placeholder={productToEdit.title} value={productToEdit.title} onChange={(e) => handleProductTitleChange(e.target.value)}/>
   </div>
   <div class="col-md-6">
-    <label for="inputPassword4" class="form-label">Description</label>
+    <label for="inputPassword4" class="form-label">train №</label>
     <input type="text" class="form-control" id="inputPassword4" placeholder={productToEdit.description} value={productToEdit.description} onChange={(e) => handleProductDescriptionChange(e.target.value)}/>
   </div>
   <div class="col-12">
-    <label for="inputAddress" class="form-label">Price</label>
+    <label for="inputAddress" class="form-label">DEPATURE Location</label>
     <input type="text" class="form-control" id="inputAddress" placeholder={productToEdit.price} value={productToEdit.price} onChange={(e) => handleProductPriceChange(e.target.value)}/>
   </div>
   <div class="col-12">
-    <label for="inputAddress2" class="form-label">DiscountPercentage</label>
+    <label for="inputAddress2" class="form-label">ARRIVE Location</label>
     <input type="text" class="form-control" id="inputAddress2" placeholder={productToEdit.discountPercentage} value={productToEdit.discountPercentage} onChange={(e) => handleProductDiscountPercentageChange(e.target.value)}/>
   </div>
   <div class="col-md-6">
-    <label for="inputCity" class="form-label">Rating</label>
+    <label for="inputCity" class="form-label">Time: DEPATURE</label>
     <input type="text" class="form-control" id="inputCity" placeholder={productToEdit.rating} value={productToEdit.rating} onChange={(e) => handleProductRatingChange(e.target.value)}/>
   </div>
   <p></p>
  
 <div class="col-md-6">
-    <label for="inputEmail4" class="form-label">Stock</label>
+    <label for="inputEmail4" class="form-label">Time: ARRIVE</label>
     <input type="email" class="form-control" id="inputEmail4" placeholder={productToEdit.stock} value={productToEdit.stock} onChange={(e) => handleProductStockChange(e.target.value)}/>
   </div>
   <div class="col-md-6">
-    <label for="inputPassword4" class="form-label">Brand</label>
+    <label for="inputPassword4" class="form-label">time-in-transit</label>
     <input type="text" class="form-control" id="inputPassword4" placeholder={productToEdit.brand} value={productToEdit.brand} onChange={(e) => handleProductBrandChange(e.target.value)}/>
   </div>
   <div class="col-12">
@@ -138,7 +258,7 @@ function App() {
     <input type="text" class="form-control" id="inputAddress" placeholder={productToEdit.category} value={productToEdit.category} onChange={(e) => handleProductCategoryChange(e.target.value)}/>
   </div>
   <div class="col-12">
-    <label for="inputAddress2" class="form-label">Thumbnail</label>
+    <label for="inputAddress2" class="form-label">FREE /seats/ Remained</label>
     <input type="text" class="form-control" id="inputAddress2" placeholder={productToEdit.thumbnail} value={productToEdit.thumbnail} onChange={(e) => handleProductThumbnailChange(e.target.value)}/>
   </div>
 
@@ -151,7 +271,7 @@ function App() {
     </div>
   </div>
   <div class="col-12">
-    <button type="submit" class="btn btn-primary" onClick={() => handleUpdate()}>UPDATE a Product</button>    <button class="btn btn-outline-danger" onClick={()=> setProductToEdit(null)}>Cancel</button>
+    <button type="submit" class="btn btn-primary" onClick={() => handleUpdate()}>UPDATE the Train</button>    <button class="btn btn-outline-danger" onClick={()=> setProductToEdit(null)}>Cancel</button>
     <p></p>
   </div>
 </form>
@@ -167,7 +287,7 @@ function App() {
           <br/>
           <br/>
           <br/>
-          <h3><strong>Products</strong></h3>
+          <h3><strong>EXTENDED TRAINS</strong>  Schedule<br/><p> </p> for {new Date().toLocaleString() + ""}</h3>
       
     
       <div>
@@ -181,15 +301,16 @@ function App() {
 <thead>
   <tr>
     <th></th>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Price</th>
-    <th>DiscountPercentage</th>
-    <th>Rating</th>
-    <th>Stock</th>
-    <th>Brand</th>
+    <th>Train Name</th>
+    <th>train №</th>
+    <th>DEPATURE Location</th>
+    <th>ARRIVE Location</th>
+    <th>Time: DEPATURE</th>
+    <th>Time: ARRIVE</th>
+    <th>time-in-transit</th>
     <th>Category</th>
-    <th>Thumbnail</th>
+    <th>FREE /seats/ Remained </th>
+    <th></th>
     <th></th>
   </tr>
  
@@ -214,7 +335,8 @@ productsVar.map(dat1 => (
       <td>{dat1.brand}</td>
       <td>{dat1.category}</td>
       <td>{dat1.thumbnail}</td>
-      <td><button onClick={() => setProductToEdit(dat1)}><strong>Edit</strong></button></td>
+      <td><button class="btn btn-primary" onClick={() => setProductToEdit(dat1)}>Edit</button></td>
+      <td><button class="btn btn-outline-danger" onClick={() => handleUpdate1(dat1)}><strong>Del</strong></button></td>
 
       </tr>       
  ))
@@ -231,6 +353,8 @@ productsVar.map(dat1 => (
 
       </div>
       </div>
+
+      </>
     );
     }
   
